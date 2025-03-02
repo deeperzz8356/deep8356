@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TIME TABLE GENERATOR</title>
+    <style>
+        /* General styling for the page */
+        table {
+            margin-top: 20px;
+        }
+
+        /* Print styling to ensure proper layout and no overlap */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #tab, #tab *, #teacherInfo, #teacherInfo * {
+                visibility: visible;
+            }
+            #tab {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            #teacherInfo {
+                position: relative;
+                top: 30px; /* Ensures space between the tables when printed */
+                left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        // Function to add a row to the table
+        function add(v2, v3, v4, v5, v6, v7) {
+            var tab = document.getElementById("tab");
+            var rowIndex = tab.rows.length;
+
+            // If all rows for Monday to Friday are filled, stop adding new rows
+            if (rowIndex > 6) {
+                alert("Time table already filled for all days.");
+                return;
+            }
+
+            var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+            var tc = tab.insertRow(rowIndex);
+
+            // Adding data to cells
+            var th = tc.insertCell(0);
+            th.innerText = days[rowIndex - 1]; // Fixed days from Monday to Friday
+            var th = tc.insertCell(1);
+            th.innerText = v2;
+            var th = tc.insertCell(2);
+            th.innerText = v3;
+            var th = tc.insertCell(3);
+            th.innerText = v4;
+            var th = tc.insertCell(4);
+            th.innerText = v5;
+            var th = tc.insertCell(5);
+            th.innerText = v6;
+            th = tc.insertCell(6);
+            th.innerText = v7;
+
+            // Add a delete button for each row
+            var delCell = tc.insertCell(7);
+            var btn = document.createElement("button");
+            btn.innerText = "Delete";
+            btn.onclick = function () {
+                deleteRow(rowIndex);
+            };
+            delCell.appendChild(btn);
+
+            // Save data to local storage
+            saveToLocalStorage();
+        }
+
+        // Function to delete a row
+        function deleteRow(index) {
+            document.getElementById("tab").deleteRow(index);
+            saveToLocalStorage(); // Update local storage after deletion
+        }
+
+        // Function to save the table data to local storage
+        function saveToLocalStorage() {
+            var table = document.getElementById("tab");
+            var rows = [];
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var cells = table.rows[i].cells;
+                var row = {
+                    day: cells[0].innerText,  // Fixed value of day
+                    time: cells[1].innerText,
+                    subject: cells[2].innerText,
+                    teacher: cells[3].innerText,
+                    code: cells[4].innerText,
+                    classroom: cells[5].innerText
+                };
+                rows.push(row);
+            }
+            localStorage.setItem("tableData", JSON.stringify(rows));
+        }
+
+        // Function to load the table data from local storage
+        function loadFromLocalStorage() {
+            var tableData = JSON.parse(localStorage.getItem("tableData"));
+            if (tableData) {
+                for (var i = 0; i < tableData.length; i++) {
+                    var row = tableData[i];
+                    add(row.time, row.subject, row.teacher, row.code, row.classroom);
+                }
+            }
+        }
+
+        // Function to update time slots dynamically
+        function updateTimeSlots() {
+            var tab = document.getElementById("tab");
+            var row = tab.rows[0];
+            for (var i = 1; i <= 6; i++) {
+                var timeSlot = document.getElementById("time" + i).value;
+                row.cells[i].innerText = timeSlot;
+            }
+        }
+
+        // Function to add subject and teacher full forms to the info section
+        function addTeacherInfo(shortName, fullName, subject) {
+            var infoTable = document.getElementById("teacherInfo");
+            var row = infoTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = shortName;
+            cell2.innerText = fullName;
+            cell3.innerText = subject;
+        }
+
+        // Load table data when the page loads
+        window.onload = function () {
+            loadFromLocalStorage();
+        };
+    </script>
+</head>
+<body style="background-color: #3b141c;">
+    <center>
+        <br>
+        <textarea id="t2"></textarea>
+        <textarea id="t3"></textarea>
+        <textarea id="t4"></textarea>
+        <textarea id="t5"></textarea>
+        <textarea id="t6"></textarea>
+        <textarea id="t7"></textarea>
+        <button onclick="add(t2.value, t3.value, t4.value, t5.value, t6.value,t7.value)">Add To Table</button>
+        <br><br>
+
+        <h1 style="color: brown;">
+            EXCELSSIOR EDUCATION SOCIETY'S <br>
+            K.C. College Of Engineering & Management Studies & Research <br>
+            MithBunder Road, Kopri, Thane(E)
+        </h1>
+
+        <label for="session">CLASS TEACHER:</label>
+        <input type="text" id="session" name="DURGESH">
+        
+        <h2>Change Time Slots</h2>
+        <input type="text" id="time1" placeholder="Enter Time Slot 1">
+        <input type="text" id="time2" placeholder="Enter Time Slot 2">
+        <input type="text" id="time3" placeholder="Enter Time Slot 3">
+        <input type="text" id="time4" placeholder="Enter Time Slot 4">
+        <input type="text" id="time5" placeholder="Enter Time Slot 5">
+        <input type="text" id="time6" placeholder="Enter Time Slot 6">
+        <button onclick="updateTimeSlots()">Update Time Slots</button>
+
+        <br><br>
+
+        <table id="tab" border="2px" cellspacing="5px" cellpadding="10px">
+            <tr>
+                <th><b>DAYS/TIME</b></th>
+                <th>10.30 To 11.30</th>
+                <th>11.30 To 12.30</th>
+                <th>12.30 To 1.30</th>
+                <th>1.30 To 2.00</th>
+                <th>2.00 To 3.00</th>
+                <th>3.00 To 4.00</th>
+                <th>ACTION</th>
+            </tr>
+        </table>
+
+        <h2>Subject and Teacher Details</h2>
+        <table id="teacherInfo" border="2px" cellspacing="5px" cellpadding="10px">
+            <tr>
+                <th>Short Form</th>
+                <th>Full Name</th>
+                <th>Subject</th>
+            </tr>
+        </table>
+        <br>
+        <input type="text" id="shortName" placeholder="Short Form of Teacher">
+        <input type="text" id="fullName" placeholder="Full Name of Teacher">
+        <input type="text" id="subject" placeholder="Subject">
+        <button onclick="addTeacherInfo(shortName.value, fullName.value, subject.value)">Add Teacher Info</button>
+        
+        <br><br>
+        <button onclick="window.print()">PRINT</button>
+    </center>
+</body>
+</html>

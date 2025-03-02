@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TIME TABLE GENERATOR</title>
+    <style>
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #3e2723; /* Dark Brown */
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1,
+        h2 {
+            color: #ffeb3b; /* Bright Yellow */
+            font-weight: 700;
+        }
+
+        /* Styling for the main container */
+        center {
+            max-width: 800px;
+            margin: auto;
+            background-color: #5d4037; /* Medium Brown */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        center:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Text Areas and Inputs */
+        textarea,
+        input[type="text"] {
+            width: 280px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #ffeb3b; /* Bright Yellow */
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #4e342e; /* Darker Brown */
+            color: #fff;
+        }
+
+        textarea:focus,
+        input[type="text"]:focus {
+            border-color: #fdd835; /* Lighter Yellow */
+            background-color: #3e2723;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #ffeb3b; /* Bright Yellow */
+            color: #3e2723; /* Dark Brown */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #fbc02d; /* Lighter Yellow */
+            color: #1b1b1b;
+        }
+
+        /* Styling for the Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: center;
+            border: 2px solid #ffffff; /* White borders */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        table th {
+            background-color: #3e2723; /* Dark Brown */
+            color: #ffeb3b; /* Bright Yellow */
+        }
+
+        table td {
+            background-color: #6d4c41; /* Medium Brown */
+            color: #fff;
+        }
+
+        table tr:hover td {
+            background-color: #4e342e; /* Darker Brown */
+            color: #ffeb3b;
+        }
+
+        /* Print styling */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #tab,
+            #tab *,
+            #teacherInfo,
+            #teacherInfo * {
+                visibility: visible;
+            }
+
+            #tab,
+            #teacherInfo {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            textarea,
+            input[type="text"],
+            button {
+                width: 90%;
+                margin: 5px 0;
+                font-size: 14px;
+            }
+
+            h1,
+            h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* Button Grouping */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Adds space between buttons */
+            margin: 20px 0;
+        }
+    </style>
+
+    <script>
+        // Function to add a row to the table
+        function add(v2, v3, v4, v5, v6, v7) {
+            if (!v2 || !v3 || !v4 || !v5 || !v6 || !v7) {
+                alert("Please fill all fields before adding to the table.");
+                return;
+            }
+            var tab = document.getElementById("tab");
+            var rowIndex = tab.rows.length;
+
+            // If all rows for Monday to Friday are filled, stop adding new rows
+            if (rowIndex > 6) {
+                alert("Time table already filled for all days.");
+                return;
+            }
+
+            var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+            var tc = tab.insertRow(rowIndex);
+
+            // Adding data to cells
+            var th = tc.insertCell(0);
+            th.innerText = days[rowIndex - 1]; // Fixed days from Monday to Friday
+            var th = tc.insertCell(1);
+            th.innerText = v2;
+            var th = tc.insertCell(2);
+            th.innerText = v3;
+            var th = tc.insertCell(3);
+            th.innerText = v4;
+            var th = tc.insertCell(4);
+            th.innerText = v5;
+            var th = tc.insertCell(5);
+            th.innerText = v6;
+            th = tc.insertCell(6);
+            th.innerText = v7;
+
+            // Add a delete button for each row
+            var delCell = tc.insertCell(7);
+            var btn = document.createElement("button");
+            btn.innerText = "Delete";
+            btn.onclick = function () {
+                deleteRow(rowIndex);
+            };
+            delCell.appendChild(btn);
+
+            // Save data to local storage
+            saveToLocalStorage();
+        }
+
+        // Function to delete a row
+        function deleteRow(index) {
+            document.getElementById("tab").deleteRow(index);
+            saveToLocalStorage(); // Update local storage after deletion
+        }
+
+        // Function to save the table data to local storage
+        function saveToLocalStorage() {
+            var table = document.getElementById("tab");
+            var rows = [];
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var cells = table.rows[i].cells;
+                var row = {
+                    day: cells[0].innerText,  // Fixed value of day
+                    time: cells[1].innerText,
+                    subject: cells[2].innerText,
+                    teacher: cells[3].innerText,
+                    code: cells[4].innerText,
+                    classroom: cells[5].innerText
+                };
+                rows.push(row);
+            }
+            localStorage.setItem("tableData", JSON.stringify(rows));
+        }
+
+        // Function to load the table data from local storage
+        function loadFromLocalStorage() {
+            var tableData = JSON.parse(localStorage.getItem("tableData"));
+            if (tableData) {
+                for (var i = 0; i < tableData.length; i++) {
+                    var row = tableData[i];
+                    add(row.time, row.subject, row.teacher, row.code, row.classroom);
+                }
+            }
+        }
+
+        // Function to update time slots dynamically
+        function updateTimeSlots() {
+            var tab = document.getElementById("tab");
+            for (var i = 1; i <= 6; i++) {
+                var timeSlot = document.getElementById("time" + i).value;
+                tab.rows[0].cells[i].innerText = timeSlot; // Update the header row
+            }
+        }
+
+        // Function to add subject and teacher full forms to the info section
+        function addTeacherInfo(shortName, fullName, subject) {
+            var infoTable = document.getElementById("teacherInfo");
+            var row = infoTable.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = shortName;
+            cell2.innerText = fullName;
+            cell3.innerText = subject;
+        }
+
+        // Function to clear the table
+        function clearTable() {
+            var tab = document.getElementById("tab");
+            var rowCount = tab.rows.length;
+            for (var i = rowCount - 1; i > 0; i--) {
+                tab.deleteRow(i);
+            }
+            localStorage.removeItem("tableData"); // Clear local storage
+        }
+
+        // Load table data when the page loads
+        window.onload = function () {
+            loadFromLocalStorage();
+        };
+    </script>
+</head>
+
+<body>
+    <center>
+        <br>
+        <textarea id="t2" placeholder="Time Slot 1"></textarea>
+        <textarea id="t3" placeholder="Subject"></textarea>
+        <textarea id="t4" placeholder="Teacher"></textarea>
+        <textarea id="t5" placeholder="Code"></textarea>
+        <textarea id="t6" placeholder="Classroom"></textarea>
+        <textarea id="t7" placeholder="Additional Info"></textarea>
+        <div class="button-group">
+            <button onclick="add(t2.value, t3.value, t4.value, t5.value, t6.value, t7.value)">Add To Table</button>
+            <button onclick="updateTimeSlots()">Update Time Slots</button>
+            <button onclick="clearTable()">Clear Table</button>
+            <button onclick="window.print()">PRINT</button>
+        </div>
+
+        <table id="tab">
+            <tr>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Code</th>
+                <th>Classroom</th>
+                <th>Action</th>
+            </tr>
+        </table>
+        
+        <h2>Teacher Information</h2>
+        <table id="teacherInfo">
+            <tr>
+                <th>Short Name</th>
+                <th>Full Name</th>
+                <th>Subject</th>
+            </tr>
+            <!-- Additional teacher info rows can be added here -->
+        </table>
+    </center>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Miniver&family=Pacifico&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Miniver&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,500;1,800;1,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('3993597_84528.jpg'); /* Replace with the actual path to your image */
+    background-size: cover; /* Cover the entire background */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent image repeat */
+    height: 100vh; /* Ensure background covers full height */
+    background-color: #3b141c;
+    font-family: Arial, sans-serif;
+}
+
+.login-box {
+    width: 320px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Frosted glass effect */
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 15px;
+    backdrop-filter: blur(10px); /* Blur effect */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Softer shadow for depth */
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Optional light border */
+}
+
+.login-box h2 {
+    font-family:  "poppins",sans-serif;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: white; /* White text for contrast */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Soft text shadow for better readability */
+}
+
+.textbox {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2); /* Transparent input fields with low opacity */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff; /* White text */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow for readability */
+    outline: none;
+    transition: background 0.3s, box-shadow 0.3s ease-in-out; /* Smooth transition for hover effects */
+}
+
+.textbox input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Placeholder color */
+}
+
+/* Dim hover effect on text input */
+.textbox input:hover {
+    background: rgba(255, 255, 255, 0.3); /* Slightly increase background opacity */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2), 0 0 10px rgba(243, 150, 28, 0.3); /* Dim glowing effect */
+}
+
+/* Dim focus effect when the input is active */
+.textbox input:focus {
+    background: rgba(255, 255, 255, 0.4); /* Slightly more visible background when active */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 15px rgba(243, 150, 28, 0.4); /* Dim glow on focus */
+}
+
+.btn {
+    width: 100%;
+    background-color: rgba(243, 150, 28, 0.7); /* Semi-transparent button */
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;  /* Smooth transition effect */
+}
+
+.btn:hover {
+    background-color: rgba(243, 150, 28, 1);  /* Darker background on hover */
+    transform: scale(1.05);     /* Slightly enlarge the button on hover */
+}
+
+.btn:active {
+    transform: scale(0.95);     /* Shrink the button when clicked */
+}
